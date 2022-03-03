@@ -1,4 +1,5 @@
 import "./App.css";
+import Counter from "./components/Counter";
 import Navbar from "./components/Navbar";
 import Homepage from "./components/Pages/Homepage";
 
