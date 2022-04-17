@@ -13,30 +13,37 @@ const one =
 
 function App() {
   
-const [myCarts, setMyCarts] = useState(
-  []
-);
+const [myCarts, setMyCarts] = useState([]);
 
 
 
-  const updateItem = (event) => {
-    const newCarts = myCarts.map(cart => {
-      if (event.target.id == cart.item_id) {
-        return { ...cart, item_quantity: event.target.value}
-      }
-      return cart;
-    });
-    setMyCarts(newCarts);
+const updateItem = (event) => {
+  const newCarts = myCarts.map(cart => {
+    if (event.target.id == cart.item_id) {
+      return { ...cart, item_quantity: event.target.value}
+    }
+    return cart;
+  });
+  setMyCarts(newCarts);
+}
+
+const handleDelete = (id) => setMyCarts(myCarts.filter(cart => cart.item_id != id))
+
+const addItem = (item) => {
+  const exist = myCarts.filter( cart => cart.item_id === item.id)
+    
+  console.log(exist)
+  if(exist.length <= 0){
+    setMyCarts([...myCarts, 
+    {
+      item_id: item.id,
+      item_name: item.name,
+      item_quantity: 1,
+      item_price: item.price
+    }]);
+  }else{
+    alert("You have added the item to your cart");
   }
-const handleClick = () => setMyCarts([...myCarts, myCarts.push( one)])
-const additem = (item) => {
-  setMyCarts([...myCarts, 
-  {
-    item_id: item.id,
-    item_name: item.name,
-    item_quantity: 1,
-    item_price: item.price
-  }]);
 }
   
 
@@ -52,13 +59,13 @@ const additem = (item) => {
             <li><a href="">About</a></li>
           </ul>
         </nav>
-        <a className='' href=""><button onClick={handleClick}>Contact</button></a>
+        <a className='' href=""><button >Contact</button></a>
       </header>
       <div className="main">
     {
       items.map((item) =>  
         (
-          <div key={item.id} className='card' onClick={() => additem(item)}>
+          <div key={item.id} className='card' onClick={() => addItem(item)}>
             <p className='card-detail'>{`Item with id: ${item.id} is ${item.name} with price ${item.price}`}</p>
           </div>
         )
@@ -76,6 +83,7 @@ const additem = (item) => {
               <th>Name</th>
               <th>Price </th>
               <th>Quantity</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -86,6 +94,7 @@ const additem = (item) => {
                 <td>{cart.item_price}</td>
                 {/* <td><input type="text" value={cart.item_quantity} onChange={() => handleOnChange(cart.item_id)}/> </td>*/}
                 <td><input id={cart.item_id} type="number" value={cart.item_quantity} onChange={updateItem}/> </td>
+                <td><button className='delete' onClick={() => handleDelete(cart.item_id)}>Delete</button></td>
               </tr>
             )
           )}
